@@ -22,8 +22,8 @@ class Bot extends CurlProcessor{
      * @return mixed
      */
      public function login($aParams){
-	$this->setCookie();
-	return $this->post($aParams);
+        $this->setCookie();
+        return $this->post($aParams);
      }
 
     /**
@@ -105,5 +105,4 @@ class Bot extends CurlProcessor{
         $this->setOptions($aOption);
     }
 
-	
 }

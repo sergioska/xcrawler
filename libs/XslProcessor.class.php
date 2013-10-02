@@ -1,8 +1,8 @@
 <?php
 
 class XslProcessor{
-	
-	public $_xslFile;
+
+    public $_xslFile;
 
     public function __construct($stylesheet) {
         $this->_xslFile = $stylesheet;
