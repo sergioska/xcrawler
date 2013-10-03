@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bot actions
+ * Bot actions xxxx
  * @author Sergio Sicari
  *
  */
