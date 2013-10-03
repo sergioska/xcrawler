@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Bot actions xxxx
+ * Bot actions
  * @author Sergio Sicari
  *
  */
 
-class Bot extends CurlProcessor{
+class Bot extends Curls{
 
     private $_sUrl;
 
