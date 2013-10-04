@@ -17,7 +17,7 @@ class Processor_Html extends Processor{
             throw new Exception("Unable to load {$xmlFile}");
         }
 		
-		$oXsl = new XslProcessor($sStyleSheet);	
+		$oXsl = new Processor_Html_Xsl($sStyleSheet);
 		$sXml = $oXsl->transformXml($this->_sCode);
 		return $sXml;
 	}
