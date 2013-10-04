@@ -1,6 +1,6 @@
 <?php
 
-class XslProcessor{
+class Processor_Html_Xsl{
 
     public $_xslFile;
 

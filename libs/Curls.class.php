@@ -7,7 +7,7 @@
  *
  */
 
-class CurlProcessor{
+class Curls{
 
     private $_hCurl;
     private $_sUrl;
