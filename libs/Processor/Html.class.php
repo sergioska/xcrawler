@@ -7,18 +7,19 @@ class Processor_Html extends Processor{
 	public function process($sHtmlCode, $sStyleSheet){
 
 		$this->_sCode = $sHtmlCode;
-
 		$this->_sCode = mb_convert_encoding($this->_sCode, 'HTML-ENTITIES', 'UTF-8');
 
 		$this->_fixIllegalClosedHtmlTagInsideScript();
 		$this->_sCode = $this->_cleaner($this->_sCode);
 
+        libxml_use_internal_errors(true);
 		if(false === ($this->_sCode = DOMDocument::loadHTML($this->_sCode))) {
             throw new Exception("Unable to load {$xmlFile}");
         }
 		
 		$oXsl = new Processor_Html_Xsl($sStyleSheet);
 		$sXml = $oXsl->transformXml($this->_sCode);
+        libxml_clear_errors();
 		return $sXml;
 	}
 
