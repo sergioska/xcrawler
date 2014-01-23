@@ -14,7 +14,6 @@ class classLoader{
         }else{
             $sFile = __DIR__ . "/../libs/" . $sClassName . ".class.php";
         }
-        echo $sFile . PHP_EOL;
         if(file_exists($sFile)){
             require_once $sFile;
         }
