@@ -1,6 +1,7 @@
 xCrawler
 =======
 
+xCrawler is a toolkit to develop spider application based on xsl stylesheets.
 
 The simple example below show how to use this toolkit to parse a rss feed (yahoo news in this case) throw a xsl stylesheet to get in output a xml forged in another format. 
 
