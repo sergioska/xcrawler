@@ -24,6 +24,8 @@ $oBot->close();
 
 ```
 
+Toolkit parse xml or html source file in trasparent way. 
+
 
 
 
