@@ -24,7 +24,7 @@ $oBot->close();
 
 ```
 
-Toolkit parse xml or html source file in trasparent way. 
+Toolkit parse xml or html source file in trasparent way; so in setUrl method, the only one parameter can set with an xml or html url.
 
 
 
