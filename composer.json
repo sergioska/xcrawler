@@ -1,0 +1,12 @@
+{
+    "name": "sergioska/xcrawler",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/sergioska/xcrawler"
+        }
+    ],
+    "require": {
+        "sergioska/xcrawler": "dev-master"
+    }
+}
