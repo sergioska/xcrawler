@@ -13,7 +13,7 @@ class Processor_Html extends Processor{
 		$this->_sCode = $this->_cleaner($this->_sCode);
 
         libxml_use_internal_errors(true);
-		if(false === ($this->_sCode = DOMDocument::loadHTML($this->_sCode))) {
+		if(false === ($this->_sCode = @DOMDocument::loadHTML($this->_sCode))) {
             throw new Exception("Unable to load {$xmlFile}");
         }
 		

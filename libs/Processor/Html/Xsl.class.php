@@ -13,9 +13,9 @@ class Processor_Html_Xsl{
      * @throws Exception
      * @return string A single SQL query string.
      */
-    public function transformXml($xml) {      
+    public function transformXml($xml) {
 
-        if(false === ($stylesheet = DOMDocument::load($this->_xslFile))) {
+        if(false === ($stylesheet = @DOMDocument::load($this->_xslFile))) {
             throw new Exception("Unable to load {$this->_xslFile}");
         }
 
