@@ -45,15 +45,19 @@ class Curls{
         }
     }
 
+    public function setProxy($sAddress){
+	    curl_setopt($this->_hCurl, CURLOPT_PROXY, $sAddress);
+    }
+
     /**
      * curl execution
-     * @throws Excpetion
+     * @throws Exception
      * @return mixed
      */
     public function execute(){
         $mResult = curl_exec ($this->_hCurl);
         if(!$mResult)
-            throw new Excpetion(curl_error($this->_hCurl));
+            throw new Exception(curl_error($this->_hCurl));
         return $mResult;
     }
 
