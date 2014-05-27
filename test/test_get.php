@@ -1,7 +1,9 @@
 <?php
 
-require_once('conf/autoload.php');
+require_once('vendor/autoload.php');
 define ('XSL_TEST', 'stylesheets/advs-get.xsl');
+
+
 
 $oBot = new Bot();
 
