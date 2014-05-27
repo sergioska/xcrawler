@@ -6,21 +6,29 @@ xCrawler is a toolkit to develop spider application based on xsl stylesheets.
 The simple example below show how to use this toolkit to parse a rss feed (yahoo news in this case) throw a xsl stylesheet to get in output a xml forged in another format. 
 
 ```php
-require_once('conf/autoload.php');
-spl_autoload_register(array('ClassLoader', 'autoloader'));
-define ('XSL_TEST', 'stylesheets/yahoorss.xsl');
+
+require_once('vendor/autoload.php');
+
+use xcrawler\libs\Bot;
+use xcrawler\libs\Processor\Factory;
+
+define ('XSL_TEST', 'stylesheets/test.xsl');
 
 $oBot = new Bot();
 
-$oBot->setUrl("http://it.notizie.yahoo.com/rss/");
-$sPage = $oBot->get();
+if(!file_exists('buffer.xml')){
+        $oBot->setUrl("http://www.example.com");
+        $aParams = array('post_key' => 'post_value');
+        $sPage = $oBot->post($aParams);
+        file_put_contents('buffer.xml', $sPage);
+}else{
+        $sPage = file_get_contents('buffer.xml');
+}
 
-$oProcessor = Processor_Factory::factory($sPage, XSL_TEST);
+$oProcessor = Factory::factory($sPage, XSL_TEST);
 $sXml = $oProcessor->process($sPage, XSL_TEST);
 
 echo $sXml;
-
-$oBot->close();
 
 ```
 
