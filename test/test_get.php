@@ -3,6 +3,8 @@
 require_once('vendor/autoload.php');
 define ('XSL_TEST', 'stylesheets/advs-get.xsl');
 
+use xcrawler\Bot;
+use xcrawler\Processor\Factory;
 
 
 $oBot = new Bot();
