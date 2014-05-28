@@ -18,7 +18,7 @@ class Xsl{
     public function transformXml($xml) {
 
         if(false === ($stylesheet = @\DOMDocument::load($this->_xslFile))) {
-            throw new Exception("Unable to load {$this->_xslFile}");
+            throw new \Exception("Unable to load {$this->_xslFile}");
         }
 
         $processor = new \XSLTProcessor();
@@ -26,11 +26,11 @@ class Xsl{
         $processor->registerPHPFunctions();
         
         if(false === ($transformationResult = $processor->transformToXML($xml))) {
-            throw new Exception("Transformation of {$xmlFile} failed");        
+            throw new \Exception("Transformation of {$xmlFile} failed");        
         }
                 
         if(!is_string($transformationResult) || strlen($transformationResult) == 0) {
-            throw new Exception("Xsl transformation for {$xmlFile} returned no result");
+            throw new \Exception("Xsl transformation for {$xmlFile} returned no result");
         }                
 
         return $transformationResult;
