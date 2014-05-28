@@ -1,7 +1,10 @@
 <?php
 
-require_once('conf/autoload.php');
+require_once('vendor/autoload.php');
 define ('XSL_TEST', 'stylesheets/advs-post.xsl');
+
+use xcrawler\Bot;
+use xcrawler\Processor\Factory;
 
 $aParams = array("email" => "xxx@xxx.com", "password" => "1234567890", "mode" => "xml", "persistent" => 1);
 
