@@ -39,35 +39,10 @@ Above example use get method to retrieve code of source page, but also it is ava
 Install
 =======
 
-```json
-{
-    "name": "xcrawler",
-    "description": "toolkit to xml/html parser projects",
-    "license": "Apache 2.0",
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "sergioska/xcrawler",
-                "version": "dev-xcrawler",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/sergioska/xcrawler.git",
-                    "reference": "origin"
-                }
-            }
-        }
-    ]
-    ,"require": {
-        "sergioska/xcrawler": "dev-xcrawler",
-    }
-    , "autoload": {
-        "psr-0": {"xcrawler": "vendor/sergioska/xcrawler/src/"}
-    }
-}
-```
+xCrawler can be install via composer as follow:
 
-
+```bash
+php composer.phar install
 ```
 
 
