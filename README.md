@@ -9,8 +9,8 @@ The simple example below show how to use this toolkit to parse a rss feed (yahoo
 
 require_once('vendor/autoload.php');
 
-use xcrawler\libs\Bot;
-use xcrawler\libs\Processor\Factory;
+use xcrawler\Bot;
+use xcrawler\Processor\Factory;
 
 define ('XSL_TEST', 'stylesheets/test.xsl');
 
