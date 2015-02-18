@@ -15,7 +15,10 @@
 			}
 		}
 	}
-    ]
+    ],
+    "autoload": {
+	"psr-4": {"xcrawler\\": "src/xcrawler"}
+    }
     ,"require": {
 	"sergioska/xcrawler": "dev-master"	
     }
