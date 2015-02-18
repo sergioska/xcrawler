@@ -3,3 +3,4 @@ stylesheets
 buffer.xml
 composer.lock
 spider.php
+composer.phar
