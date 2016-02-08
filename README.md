@@ -35,6 +35,77 @@ echo $sXml;
 Toolkit parse xml or html source file in trasparent way; so in setUrl method, the only one parameter can set with an xml or html url. 
 Above example use get method to retrieve code of source page, but also it is available post method for post request.
 
+A more complex example is:
+
+```php
+require_once('vendor/autoload.php');
+
+use xcrawler\Bot;
+use xcrawler\Processor\Factory;
+use xcrawler\Utils;
+
+
+class Spider
+{
+
+	const XSL_LIST = 'stylesheets/cavalli-a-roma.xsl';
+	const URL_LIST = "http://www.cavalliaroma.it/formexpo/frontend/list.php?ltr=%s";
+	const XSL_DETAILS = 'stylesheets/cavalli-a-roma-details.xsl';
+	const URL_DETAILS_BASE = 'http://www.cavalliaroma.it/formexpo/frontend/';
+	const BUFFER_PATH = 'buffer/';
+
+	static public function run()
+	{
+
+		$aPages = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+		for ($nPage=0; $nPage < count($aPages); $nPage++) {
+
+			$oBot = new Bot();
+			$oBot->setUrl(sprintf(self::URL_LIST, $aPages[$nPage]));
+			$oBot->setProxy('192.168.99.100:9050');
+			$oBot->setSOCKS5();
+			$sPage = "";
+			$sPage = Utils::bufferize($oBot, self::BUFFER_PATH . sprintf('buffer-%d.bak', $nPage), $sPage);
+
+			$oProcessor = Factory::factory($sPage, self::XSL_LIST);
+			$sXml = $oProcessor->process($sPage, self::XSL_LIST);
+			$aXml = Utils::xmlToArray($sXml);
+
+			$i=0;
+			foreach($aXml['result']['item'] as $item) {
+
+				if(empty($item['name']))
+					continue;
+				//var_dump($item['link']);die("OK");
+				$oDetailsBot = new Bot();
+				//$oDetailsBot->setProxy('192.168.99.100:9050');
+				//$oDetailsBot->setSOCKS5();
+				$oDetailsBot->setUrl(self::URL_DETAILS_BASE . $item['link']);
+				$sDetailsPage = "";
+				$bak = sprintf('buffer-details-%d-%d.bak', $nPage, $i);
+				$sDetailsPage = Utils::bufferize($oDetailsBot, self::BUFFER_PATH . $bak, $sDetailsPage);
+				//$sDetailsPage = removeTags($sDetailsPage);
+				$oDetailsProcessor = Factory::factory($sDetailsPage, self::XSL_DETAILS);
+				$sDetailsXml = $oDetailsProcessor->process($sDetailsPage, self::XSL_DETAILS);
+				$aEmail = Utils::xmlToArray($sDetailsXml);
+				if ($aEmail['result'])
+					echo $item['name'] . ", " . $aEmail['result']['item']['email'] . "\n";
+				$i++;
+				$oDetailsBot->close();
+			}
+
+			$oBot->close();
+		}
+
+	}
+
+}
+
+Spider::run();
+
+```
+
 
 Install
 =======
