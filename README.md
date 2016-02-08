@@ -48,10 +48,10 @@ use xcrawler\Utils;
 class Spider
 {
 
-	const XSL_LIST = 'stylesheets/cavalli-a-roma.xsl';
-	const URL_LIST = "http://www.cavalliaroma.it/formexpo/frontend/list.php?ltr=%s";
-	const XSL_DETAILS = 'stylesheets/cavalli-a-roma-details.xsl';
-	const URL_DETAILS_BASE = 'http://www.cavalliaroma.it/formexpo/frontend/';
+	const XSL_LIST = 'stylesheets/example.xsl';
+	const URL_LIST = "http://www.example.comlist.php?ltr=%s";
+	const XSL_DETAILS = 'stylesheets/example-details.xsl';
+	const URL_DETAILS_BASE = 'http://www.example.com/x/details';
 	const BUFFER_PATH = 'buffer/';
 
 	static public function run()
@@ -77,15 +77,15 @@ class Spider
 
 				if(empty($item['name']))
 					continue;
-				//var_dump($item['link']);die("OK");
+
 				$oDetailsBot = new Bot();
-				//$oDetailsBot->setProxy('192.168.99.100:9050');
-				//$oDetailsBot->setSOCKS5();
+				$oDetailsBot->setProxy('192.168.99.100:9050');
+				$oDetailsBot->setSOCKS5();
 				$oDetailsBot->setUrl(self::URL_DETAILS_BASE . $item['link']);
 				$sDetailsPage = "";
 				$bak = sprintf('buffer-details-%d-%d.bak', $nPage, $i);
 				$sDetailsPage = Utils::bufferize($oDetailsBot, self::BUFFER_PATH . $bak, $sDetailsPage);
-				//$sDetailsPage = removeTags($sDetailsPage);
+
 				$oDetailsProcessor = Factory::factory($sDetailsPage, self::XSL_DETAILS);
 				$sDetailsXml = $oDetailsProcessor->process($sDetailsPage, self::XSL_DETAILS);
 				$aEmail = Utils::xmlToArray($sDetailsXml);
