@@ -14,6 +14,7 @@ class Html extends Processor{
 		$this->_sCode = $sHtmlCode;
 		$this->_sCode = mb_convert_encoding($this->_sCode, 'HTML-ENTITIES', 'UTF-8');
 
+
 		$this->_fixIllegalClosedHtmlTagInsideScript();
 		$this->_sCode = $this->_cleaner($this->_sCode);
 
@@ -31,23 +32,19 @@ class Html extends Processor{
 
 	private function _cleaner($sXml){
 		$sXml = preg_replace('/^<!DOCTYPE.+?>/', '', $sXml);
+		$sXml = $this->_removeTags($sXml);
 		return $sXml;
 	}
 
 	private function _fixIllegalClosedHtmlTagInsideScript()
 	{
 
-		if (!function_exists('_cbFixIllegalClosedHtmlTagInsideScript')) {
-			function _cbFixIllegalClosedHtmlTagInsideScript($aMatch) {
-				return $aMatch[1] . preg_replace('~</([a-zA-Z])~', '<\/$1', $aMatch[2]) . $aMatch[3];
-			}
-		}
-
 		$sContents = preg_replace_callback(
 			'~(<script[^>]*>)(.*?)(</script>)~si',
-			__NAMESPACE__ .'\Html::_cbFixIllegalClosedHtmlTagInsideScript',
+			'self::_cbFixIllegalClosedHtmlTagInsideScript',
 			$this->_sCode
 		);
+		
 		$sPcreError = (string)preg_last_error();
 
 		// Check for NULL return value of PCRE function on errors
@@ -57,8 +54,15 @@ class Html extends Processor{
 		$this->_sCode = $sContents;
 	}
 
-    function _cbFixIllegalClosedHtmlTagInsideScript($aMatch) {
+    public static function _cbFixIllegalClosedHtmlTagInsideScript($aMatch) {
 	    return $aMatch[1] . preg_replace('~</([a-zA-Z])~', '<\/$1', $aMatch[2]) . $aMatch[3];
+	}
+
+	private function _removeTags($sPage) {
+		$sPage = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $sPage);
+		$sPage = preg_replace('#<head>(.*?)</head>#is', '', $sPage);
+		$sPage = str_replace("&nbsp;", "", $sPage);
+		return $sPage;
 	}
 
 }

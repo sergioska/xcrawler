@@ -1,6 +1,13 @@
 vendor
-stylesheets
+stylesheets/*.xsl
+!stylesheets/helpers
+stylesheets/helpers/*
 buffer.xml
 composer.lock
 spider.php
 composer.phar
+buffer
+output
+!test/test_*.php
+test/*.php
+roller.sh

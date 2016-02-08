@@ -87,7 +87,7 @@ class Bot extends Curls{
         $aOptions[CURLOPT_POST] = 0;
         $aOptions[CURLOPT_FOLLOWLOCATION] = 1;
         $aOptions[CURLOPT_FOLLOWLOCATION] = 0;
-        $aOptions[CURLOPT_HEADER] = 0;
+        //$aOptions[CURLOPT_HEADER] = 0;
         $aOptions[CURLOPT_RETURNTRANSFER] = 1;
         try{
             $this->setOptions($aOptions);

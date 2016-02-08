@@ -49,6 +49,10 @@ class Curls{
 	    curl_setopt($this->_hCurl, CURLOPT_PROXY, $sAddress);
     }
 
+    public function setSOCKS5(){
+        curl_setopt($this->_hCurl, CURLOPT_PROXYTYPE, 7);
+    }
+
     /**
      * curl execution
      * @throws Exception
@@ -57,7 +61,7 @@ class Curls{
     public function execute(){
         $mResult = curl_exec ($this->_hCurl);
         if(!$mResult)
-            throw new Exception(curl_error($this->_hCurl));
+            throw new \Exception(curl_error($this->_hCurl));
         return $mResult;
     }
 
