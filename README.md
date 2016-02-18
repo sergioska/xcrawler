@@ -66,7 +66,7 @@ class Spider
 			$oBot->setProxy('192.168.99.100:9050');
 			$oBot->setSOCKS5();
 			$sPage = "";
-			$sPage = Utils::bufferize($oBot, self::BUFFER_PATH . sprintf('buffer-%d.bak', $nPage), $sPage);
+			$sPage = Utils::bufferize(self::BUFFER_PATH . sprintf('buffer-%d.bak', $nPage), array('Spider', 'getData'), array($soBot));
 
 			$oProcessor = Factory::factory($sPage, self::XSL_LIST);
 			$sXml = $oProcessor->process($sPage, self::XSL_LIST);
@@ -84,7 +84,7 @@ class Spider
 				$oDetailsBot->setUrl(self::URL_DETAILS_BASE . $item['link']);
 				$sDetailsPage = "";
 				$bak = sprintf('buffer-details-%d-%d.bak', $nPage, $i);
-				$sDetailsPage = Utils::bufferize($oDetailsBot, self::BUFFER_PATH . $bak, $sDetailsPage);
+				$sDetailsPage = Utils::bufferize(self::BUFFER_PATH . $bak, array('Spider', 'getData'), array($oDetailsBot));
 
 				$oDetailsProcessor = Factory::factory($sDetailsPage, self::XSL_DETAILS);
 				$sDetailsXml = $oDetailsProcessor->process($sDetailsPage, self::XSL_DETAILS);
@@ -98,6 +98,10 @@ class Spider
 			$oBot->close();
 		}
 
+	}
+	
+	static public function getData($oBot) {
+		return $oBot->get();
 	}
 
 }
