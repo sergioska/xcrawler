@@ -8,6 +8,6 @@ spider.php
 composer.phar
 buffer
 output
-!test/test_*.php
-test/*.php
+!example/test_*.php
+example/*.php
 roller.sh
