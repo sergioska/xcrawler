@@ -3,7 +3,7 @@
 namespace xcrawler;
 
 class Utils {
-	
+
 	static public function xmlToArray($str) {
 		$xml = simplexml_load_string($str, "SimpleXMLElement", LIBXML_NOCDATA);
 		$json = json_encode($xml);
@@ -11,11 +11,10 @@ class Utils {
 		return $array;
 	}
 
-	static public function bufferize($oBot, $sPath, $sPage) {
+	static public function bufferize($sPath, $callback, $callback_params) {
 		if(!file_exists($sPath)){
-			$sPage = $oBot->get();
+			$sPage = call_user_func_array($callback, $callback_params);
 			file_put_contents($sPath, $sPage);
-			sleep(rand(2,5));
 		}else{
 			$sPage = file_get_contents($sPath);
 		}
