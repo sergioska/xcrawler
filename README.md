@@ -42,6 +42,8 @@ Above example use get method to retrieve code of source page, but also it is ava
 A more complex example is:
 
 ```php
+<?php
+
 require_once('vendor/autoload.php');
 
 use xcrawler\Bot;
