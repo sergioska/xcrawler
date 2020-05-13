@@ -7,31 +7,31 @@ The simple example below show how to use this toolkit to parse a rss feed (yahoo
 
 ```php
 
-	require_once('vendor/autoload.php');
+require_once('vendor/autoload.php');
 
-	use xcrawler\Bot;
+use xcrawler\Bot;
 
 
-	class Spider
-	{
-	    public function run(
-		Processor $processor,
-		string $content,
-		string $stylesheet
-	    ): string
-	    {
-		return $processor->process($content, $stylesheet);
-	    }
-	}
+class Spider
+{
+    public function run(
+	Processor $processor,
+	string $content,
+	string $stylesheet
+    ): string
+    {
+	return $processor->process($content, $stylesheet);
+    }
+}
 
-	$spider = new Spider();
-	$bot = new Bot();
-	$bot->setUrl('http://www.example.com');
-	$stylesheet = 'stylesheet.xsl';
-	$content = $bot->get();
-	$output = $spider->run(new Processor\HtmlProcessor(), $content, $stylesheet);
+$spider = new Spider();
+$bot = new Bot();
+$bot->setUrl('http://www.example.com');
+$stylesheet = 'stylesheet.xsl';
+$content = $bot->get();
+$output = $spider->run(new Processor\HtmlProcessor(), $content, $stylesheet);
 
-	echo $output
+echo $output
 
 ```
 
