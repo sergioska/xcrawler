@@ -15,12 +15,12 @@ use xcrawler\Bot;
 class Spider
 {
     public function run(
-        Processor $processor,
-        string $content,
-        string $stylesheet
+	Processor $processor,
+	string $content,
+	string $stylesheet
     ): string
     {
-        return $processor->process($content, $stylesheet);
+	return $processor->process($content, $stylesheet);
     }
 }
 
