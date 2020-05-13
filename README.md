@@ -6,6 +6,7 @@ xCrawler is a toolkit `FRAMEWORK AGNOSTIC` to develop spider application based o
 The simple example below show how to use this toolkit to parse a rss feed (yahoo news in this case) throw a xsl stylesheet to get in output a xml forged in another format. 
 
 ```php
+<?php
 
 require_once('vendor/autoload.php');
 
