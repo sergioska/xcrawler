@@ -9,8 +9,8 @@
 
 namespace xcrawler;
 
-class Curls{
-
+class Curls
+{
     private $_hCurl;
     private $_sUrl;
     private $_sCookies;
@@ -19,7 +19,8 @@ class Curls{
     /**
      * curl options and properties init
      */
-    function __construct(){
+    public function __construct()
+    {
         $this->_hCurl = null;
         $this->_sUrl = null;
         $this->_sCookies = null;
@@ -31,7 +32,7 @@ class Curls{
                 CURLOPT_RETURNTRANSFER => 1,
         );
         $this->_hCurl = curl_init();
-        curl_setopt_array($this->_hCurl , $this->_aOptions);
+        curl_setopt_array($this->_hCurl, $this->_aOptions);
     }
 
     /**
@@ -39,17 +40,20 @@ class Curls{
      * @param $aOptions
      * @return void
      */
-    public function setOptions($aOptions){
-        foreach($aOptions as $key => $value){
+    public function setOptions($aOptions)
+    {
+        foreach ($aOptions as $key => $value) {
             curl_setopt($this->_hCurl, $key, $value);
         }
     }
 
-    public function setProxy($sAddress){
-	    curl_setopt($this->_hCurl, CURLOPT_PROXY, $sAddress);
+    public function setProxy($sAddress)
+    {
+        curl_setopt($this->_hCurl, CURLOPT_PROXY, $sAddress);
     }
 
-    public function setSOCKS5(){
+    public function setSOCKS5()
+    {
         curl_setopt($this->_hCurl, CURLOPT_PROXYTYPE, 7);
     }
 
@@ -58,10 +62,12 @@ class Curls{
      * @throws Exception
      * @return mixed
      */
-    public function execute(){
-        $mResult = curl_exec ($this->_hCurl);
-        if(!$mResult)
+    public function execute()
+    {
+        $mResult = curl_exec($this->_hCurl);
+        if (!$mResult) {
             throw new \Exception(curl_error($this->_hCurl));
+        }
         return $mResult;
     }
 
@@ -69,9 +75,11 @@ class Curls{
      * execute a curl request for cookie setting
      * @return boolean
      */
-    public function setCookie(){
-        if(!isset($this->_sUrl))
+    public function setCookie()
+    {
+        if (!isset($this->_sUrl)) {
             return false;
+        }
         $hCurl = curl_init($this->_sUrl);
         curl_setopt($hCurl, CURLOPT_URL, $this->_sUrl);
         curl_setopt($hCurl, CURLOPT_FOLLOWLOCATION, 0);
@@ -89,7 +97,8 @@ class Curls{
      * get cookie value
      * @return string
      */
-    public function getCookie(){
+    public function getCookie()
+    {
         return $this->_sCookies;
     }
 
@@ -97,16 +106,19 @@ class Curls{
      * Close cUrl handler
      * @return void
      */
-    public function close(){
-        if(isset($this->_hCurl))
+    public function close()
+    {
+        if (isset($this->_hCurl)) {
             curl_close($this->_hCurl);
+        }
     }
 
     /**
      * get current curl handle
      * @return object
      */
-    public function getCurl(){
+    public function getCurl()
+    {
         return $this->_hCurl;
     }
 
@@ -114,8 +126,8 @@ class Curls{
      * url setting
      * @param $sUrl
      */
-    public function setUrl($sUrl){
+    public function setUrl($sUrl)
+    {
         $this->_sUrl = $sUrl;
     }
-
 }

@@ -10,11 +10,12 @@ namespace xcrawler;
 
 use xcrawler\Curls;
 
-class Bot extends Curls{
-
+class Bot extends Curls
+{
     private $_sUrl;
 
-    function __construct(){
+    public function __construct()
+    {
         $this->_sUrl = "";
         parent::__construct();
     }
@@ -25,10 +26,11 @@ class Bot extends Curls{
      *  Ex.: array('username_field' => 'blahblah', 'password_field' => ...', ...);
      * @return mixed
      */
-     public function login($aParams){
+    public function login($aParams)
+    {
         $this->setCookie();
         return $this->post($aParams);
-     }
+    }
 
     /**
      * Execute a cUrl post request
@@ -37,13 +39,15 @@ class Bot extends Curls{
      *  Ex.: array('username_field' => 'blahblah', 'password_field' => ...', ...);
      * @return mixed
      */
-    public function post($aParams=array()){
+    public function post($aParams=array())
+    {
         $mResult = false;
         $sPostdata = "";
-        if(!isset($this->_sUrl))
+        if (!isset($this->_sUrl)) {
             return false;
-        if(!empty($aParams)){
-            foreach($aParams as $key => $value){
+        }
+        if (!empty($aParams)) {
+            foreach ($aParams as $key => $value) {
                 $sPostdata .= $key . "=" . urlencode($value) . "&";
             }
             $sPostdata = substr($sPostdata, 0, -1);
@@ -53,10 +57,10 @@ class Bot extends Curls{
         $aOptions[CURLOPT_COOKIEJAR] = $this->getCookie();
         $aOptions[CURLOPT_REFERER] = $this->_sUrl;
         $aOptions[CURLOPT_POST] = 1;
-        try{
+        try {
             $this->setOptions($aOptions);
             $mResult = $this->execute();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $mResult = $e->getMessage();
         }
         return $mResult;
@@ -69,13 +73,15 @@ class Bot extends Curls{
      *  Ex.: array('username_field' => 'blahblah', 'password_field' => ...', ...);
      * @return mixed
      */
-    public function get($aParams=array()){
-        if($this->_sUrl=="")
+    public function get($aParams=array())
+    {
+        if ($this->_sUrl=="") {
             return false;
+        }
         $mResult = false;
         $sGetdata = "";
-        if(!empty($aParams)){
-            foreach($aParams as $key => $value){
+        if (!empty($aParams)) {
+            foreach ($aParams as $key => $value) {
                 $sGetdata .= $key . "=" . urlencode($value) . "&";
             }
             $sGetdata = substr($sGetdata, 0, -1);
@@ -89,24 +95,25 @@ class Bot extends Curls{
         $aOptions[CURLOPT_FOLLOWLOCATION] = 0;
         //$aOptions[CURLOPT_HEADER] = 0;
         $aOptions[CURLOPT_RETURNTRANSFER] = 1;
-        try{
+        try {
             $this->setOptions($aOptions);
             $mResult = $this->execute();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $mResult 	= $e->getMessage();
         }
         return $mResult;
     }
 
-    public function getUrl(){
+    public function getUrl()
+    {
         return $this->_sUrl;
     }
 
-    public function setUrl($sUrl){
+    public function setUrl($sUrl)
+    {
         $this->_sUrl = $sUrl;
         parent::setUrl($sUrl);
         $aOption[CURLOPT_URL] = $this->_sUrl;
         $this->setOptions($aOption);
     }
-
 }

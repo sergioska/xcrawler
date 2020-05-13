@@ -3,29 +3,25 @@
     "description": "toolkit to xml/html parser projects",
     "license": "Apache 2.0",
     "repositories": [
-	{
-		"type": "package",
-		"package": {
-			"name": "sergioska/xcrawler",
-			"version": "dev-master",
-			"source": {
-				"type": "git",
-				"url": "https://github.com/sergioska/xcrawler.git",
-				"reference": "origin"
+		{
+			"type": "package",
+			"package": {
+				"name": "sergioska/xcrawler",
+				"version": "dev-master",
+				"source": {
+					"type": "git",
+					"url": "https://github.com/sergioska/xcrawler.git",
+					"reference": "origin"
+				}
 			}
 		}
-	}
     ],
     "autoload": {
-	"psr-4": {"xcrawler\\": "src/xcrawler"}
-    }
-    ,"require": {
-	"sergioska/xcrawler": "dev-master"	
-    }
-    ,"extra": {
-	"installer-paths":
-	{
-		"libs": ["sergioska/xcrawler"]
-	}	
-    }
+		"psr-4": {"xcrawler\\": "src/xcrawler"}
+    },
+	"extra": {
+		"installer-paths": {
+				"libs": ["sergioska/xcrawler"]
+			}
+	}
 }
