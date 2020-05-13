@@ -23,7 +23,7 @@ class XmlFormat implements FormatService
         libxml_use_internal_errors(true);
         $this->content = \DOMDocument::loadXML($this->content);
         if ($this->content === false) {
-            throw new Exception("Unable to load xmlFile");
+            throw new \Exception("Unable to load xmlFile");
         }
         libxml_clear_errors();
         return $this->content;

@@ -17,6 +17,7 @@ class HtmlFormat implements FormatService
 
     /**
      * @return \DOMDocument
+     * @throws \Exception
      */
     public function getCleanContent(): \DOMDocument
     {
@@ -28,7 +29,7 @@ class HtmlFormat implements FormatService
         libxml_use_internal_errors(true);
         $this->content = \DOMDocument::loadHTML($this->content);
         if ($this->content === false) {
-            throw new Exception("Unable to load xmlFile");
+            throw new \Exception("Unable to load xmlFile");
         }
 
         return $this->content;

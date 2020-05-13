@@ -23,5 +23,12 @@
 		"installer-paths": {
 				"libs": ["sergioska/xcrawler"]
 			}
+	},
+    "require-dev": {
+        "vimeo/psalm": "^3.11"
+    },
+	"require": {
+		"ext-dom": "*",
+		"ext-curl": "*"
 	}
 }

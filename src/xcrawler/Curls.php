@@ -59,8 +59,8 @@ class Curls
 
     /**
      * curl execution
-     * @throws Exception
      * @return mixed
+     * @throws \Exception
      */
     public function execute()
     {

@@ -60,7 +60,7 @@ class Bot extends Curls
         try {
             $this->setOptions($aOptions);
             $mResult = $this->execute();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $mResult = $e->getMessage();
         }
         return $mResult;
@@ -93,12 +93,11 @@ class Bot extends Curls
         $aOptions[CURLOPT_POST] = 0;
         $aOptions[CURLOPT_FOLLOWLOCATION] = 1;
         $aOptions[CURLOPT_FOLLOWLOCATION] = 0;
-        //$aOptions[CURLOPT_HEADER] = 0;
         $aOptions[CURLOPT_RETURNTRANSFER] = 1;
         try {
             $this->setOptions($aOptions);
             $mResult = $this->execute();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $mResult 	= $e->getMessage();
         }
         return $mResult;
