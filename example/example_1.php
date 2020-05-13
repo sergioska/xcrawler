@@ -3,74 +3,63 @@
 require_once('vendor/autoload.php');
 
 use xcrawler\Bot;
-use xcrawler\Processor\Factory;
-use xcrawler\Utils;
-
+use xcrawler\Helpers\Utils;
+use xcrawler\Processor;
 
 class Spider
 {
+    const XSL_LIST = 'stylesheets/example.xsl';
+    const URL_LIST = "http://www.example.comlist.php?ltr=%s";
+    const XSL_DETAILS = 'stylesheets/example-details.xsl';
+    const URL_DETAILS_BASE = 'http://www.example.com/x/details';
+    const BUFFER_PATH = 'buffer/';
 
-	const XSL_LIST = 'stylesheets/list_example.xsl';
-	const URL_LIST = "http://www.example.com/list.php?ltr=%s";
-	const XSL_DETAILS = 'stylesheets/details_example.xsl';
-	const URL_DETAILS_BASE = 'http://www.example.com';
-	const BUFFER_PATH = 'buffer/';
+    public function run(Processor $processor)
+    {
+        $pages = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
-	static public function run()
-	{
+        for ($nPage=0; $nPage < count($pages); $nPage++) {
+            $bot = new Bot();
+            $bot->setUrl(sprintf(self::URL_LIST, $pages[$nPage]));
+            $bot->setProxy('192.168.99.100:9050');
+            $bot->setSOCKS5();
+            $page = Utils::bufferize(self::BUFFER_PATH . sprintf('buffer-%d.bak', $nPage), array('Spider', 'getData'), array($bot));
 
-		$aPages = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+            $xmlContent = $processor->process($page, self::XSL_LIST);
+            $xmlItems = Utils::xmlToArray($xmlContent);
 
-		for ($nPage=0; $nPage < count($aPages); $nPage++) {
+            $i=0;
+            foreach ($xmlItems['result']['item'] as $item) {
+                if (empty($item['name'])) {
+                    continue;
+                }
 
-			$oBot = new Bot();
-			$oBot->setUrl(sprintf(self::URL_LIST, $aPages[$nPage]));
-			$oBot->setProxy('192.168.99.100:9050');
-			$oBot->setSOCKS5();
-			$sPage = "";
-			$sPage = Utils::bufferize(self::BUFFER_PATH . sprintf('buffer-%d.bak', $nPage), array('Spider', 'getData'), array($oBot));
+                $detailsBot = new Bot();
+                $detailsBot->setProxy('192.168.99.100:9050');
+                $detailsBot->setSOCKS5();
+                $detailsBot->setUrl(self::URL_DETAILS_BASE . $item['link']);
+                $bak = sprintf('buffer-details-%d-%d.bak', $nPage, $i);
+                $detailsPage = Utils::bufferize(self::BUFFER_PATH . $bak, array('Spider', 'getData'), array($detailsBot));
 
-			$oProcessor = Factory::factory($sPage, self::XSL_LIST);
-			$sXml = $oProcessor->process($sPage, self::XSL_LIST);
-			$aXml = Utils::xmlToArray($sXml);
+                $oDetailsProcessor = Factory::factory($detailsPage, self::XSL_DETAILS);
+                $detailsXml = $oDetailsProcessor->process($detailsPage, self::XSL_DETAILS);
+                $emails = Utils::xmlToArray($detailsXml);
+                if ($emails['result']) {
+                    echo $item['name'] . ", " . $emails['result']['item']['email'] . "\n";
+                }
+                $i++;
+                $detailsBot->close();
+            }
 
-			$i=0;
-			foreach($aXml['result']['item'] as $item) {
+            $bot->close();
+        }
+    }
 
-				if(empty($item['name']))
-					continue;
-				//var_dump($item['link']);die("OK");
-				$oDetailsBot = new Bot();
-				$oDetailsBot->setProxy('192.168.99.100:9050');
-				$oDetailsBot->setSOCKS5();
-				$oDetailsBot->setUrl(self::URL_DETAILS_BASE . $item['link']);
-				$sDetailsPage = "";
-				$bak = sprintf('buffer-details-%d-%d.bak', $nPage, $i);
-				$sDetailsPage = Utils::bufferize(self::BUFFER_PATH . $bak, array('Spider', 'getData'), array($oDetailsBot));
-				//$sDetailsPage = removeTags($sDetailsPage);
-				$oDetailsProcessor = Factory::factory($sDetailsPage, self::XSL_DETAILS);
-				$sDetailsXml = $oDetailsProcessor->process($sDetailsPage, self::XSL_DETAILS);
-
-				$aEmail = Utils::xmlToArray($sDetailsXml);
-				if ($aEmail['result'])
-					echo $item['name'] . ", " . $aEmail['result']['item']['email'] . "\n";
-				$i++;
-				$oDetailsBot->close();
-			}
-
-			$oBot->close();
-		}
-
-	}
-
-	static public function getData($oBot) {
-		return $oBot->get();
-	}
-
+    public static function getData($oBot)
+    {
+        return $oBot->get();
+    }
 }
 
-Spider::run();
-
-
-
-
+$spider = new Spider();
+$spider->run(new Processor\HtmlProcessor());

@@ -37,7 +37,6 @@ abstract class Processor
     private function applyStylesheet(FormatService $format, string $stylesheetPath): string
     {
 
-        // @todo: try refactoring with Assertions ...
         try {
             $xslDoc = new \DOMDocument();
             $xslDoc->load($stylesheetPath);
