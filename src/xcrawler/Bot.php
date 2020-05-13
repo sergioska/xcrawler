@@ -8,15 +8,13 @@
 
 namespace xcrawler;
 
-use xcrawler\Curls;
-
 class Bot extends Curls
 {
-    private $_sUrl;
+    private $url;
 
     public function __construct()
     {
-        $this->_sUrl = "";
+        $this->url = "";
         parent::__construct();
     }
 
@@ -26,10 +24,10 @@ class Bot extends Curls
      *  Ex.: array('username_field' => 'blahblah', 'password_field' => ...', ...);
      * @return mixed
      */
-    public function login($aParams)
+    public function login($params)
     {
         $this->setCookie();
-        return $this->post($aParams);
+        return $this->post($params);
     }
 
     /**
@@ -39,31 +37,30 @@ class Bot extends Curls
      *  Ex.: array('username_field' => 'blahblah', 'password_field' => ...', ...);
      * @return mixed
      */
-    public function post($aParams=array())
+    public function post($params=array())
     {
-        $mResult = false;
-        $sPostdata = "";
-        if (!isset($this->_sUrl)) {
+        $postContent = "";
+        if (!isset($this->url)) {
             return false;
         }
-        if (!empty($aParams)) {
-            foreach ($aParams as $key => $value) {
-                $sPostdata .= $key . "=" . urlencode($value) . "&";
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $postContent .= $key . "=" . urlencode($value) . "&";
             }
-            $sPostdata = substr($sPostdata, 0, -1);
-            $aOptions[CURLOPT_POSTFIELDS] = $sPostdata;
+            $postContent = substr($postContent, 0, -1);
+            $options[CURLOPT_POSTFIELDS] = $postContent;
         }
-        $aOptions[CURLOPT_COOKIE] = $this->getCookie();
-        $aOptions[CURLOPT_COOKIEJAR] = $this->getCookie();
-        $aOptions[CURLOPT_REFERER] = $this->_sUrl;
-        $aOptions[CURLOPT_POST] = 1;
+        $options[CURLOPT_COOKIE] = $this->getCookie();
+        $options[CURLOPT_COOKIEJAR] = $this->getCookie();
+        $options[CURLOPT_REFERER] = $this->url;
+        $options[CURLOPT_POST] = 1;
         try {
-            $this->setOptions($aOptions);
-            $mResult = $this->execute();
+            $this->setOptions($options);
+            $result = $this->execute();
         } catch (\Exception $e) {
-            $mResult = $e->getMessage();
+            $result = $e->getMessage();
         }
-        return $mResult;
+        return $result;
     }
 
     /**
@@ -73,46 +70,45 @@ class Bot extends Curls
      *  Ex.: array('username_field' => 'blahblah', 'password_field' => ...', ...);
      * @return mixed
      */
-    public function get($aParams=array())
+    public function get($params=array())
     {
-        if ($this->_sUrl=="") {
+        if ($this->url=="") {
             return false;
         }
-        $mResult = false;
-        $sGetdata = "";
-        if (!empty($aParams)) {
-            foreach ($aParams as $key => $value) {
-                $sGetdata .= $key . "=" . urlencode($value) . "&";
+        $dataContent = "";
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                $dataContent .= $key . "=" . urlencode($value) . "&";
             }
-            $sGetdata = substr($sGetdata, 0, -1);
-            $aOptions[CURLOPT_REFERER] = $this->_sUrl . "?" . $sGetdata;
+            $dataContent = substr($dataContent, 0, -1);
+            $options[CURLOPT_REFERER] = $this->url . "?" . $dataContent;
         } else {
-            $aOptions[CURLOPT_REFERER] = $this->_sUrl;
+            $options[CURLOPT_REFERER] = $this->url;
         }
 
-        $aOptions[CURLOPT_POST] = 0;
-        $aOptions[CURLOPT_FOLLOWLOCATION] = 1;
-        $aOptions[CURLOPT_FOLLOWLOCATION] = 0;
-        $aOptions[CURLOPT_RETURNTRANSFER] = 1;
+        $options[CURLOPT_POST] = 0;
+        $options[CURLOPT_FOLLOWLOCATION] = 1;
+        $options[CURLOPT_FOLLOWLOCATION] = 0;
+        $options[CURLOPT_RETURNTRANSFER] = 1;
         try {
-            $this->setOptions($aOptions);
-            $mResult = $this->execute();
+            $this->setOptions($options);
+            $result = $this->execute();
         } catch (\Exception $e) {
-            $mResult 	= $e->getMessage();
+            $result = $e->getMessage();
         }
-        return $mResult;
+        return $result;
     }
 
     public function getUrl()
     {
-        return $this->_sUrl;
+        return $this->url;
     }
 
-    public function setUrl($sUrl)
+    public function setUrl($url)
     {
-        $this->_sUrl = $sUrl;
-        parent::setUrl($sUrl);
-        $aOption[CURLOPT_URL] = $this->_sUrl;
-        $this->setOptions($aOption);
+        $this->url = $url;
+        parent::setUrl($url);
+        $options[CURLOPT_URL] = $this->url;
+        $this->setOptions($options);
     }
 }

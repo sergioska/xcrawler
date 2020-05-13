@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace xcrawler;
 
+use Webmozart\Assert\Assert;
 use xcrawler\Processor\FormatService;
 
 abstract class Processor
@@ -36,6 +37,8 @@ abstract class Processor
      */
     private function applyStylesheet(FormatService $format, string $stylesheetPath): string
     {
+
+        Assert::isInstanceOf($format, FormatService::class);
 
         try {
             $xslDoc = new \DOMDocument();

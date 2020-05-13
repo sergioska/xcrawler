@@ -11,28 +11,33 @@ namespace xcrawler;
 
 class Curls
 {
-    private $_hCurl;
-    private $_sUrl;
-    private $_sCookies;
-    protected $_aOptions;
+
+    const USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6';
+    const CURL_TIMEOUT = 60;
+    const CURLOPT_SOCKS5_PROXYTYPE = 7;
+
+    private $curlHandler;
+    private $url;
+    private $cookies;
+    protected $options;
 
     /**
      * curl options and properties init
      */
     public function __construct()
     {
-        $this->_hCurl = null;
-        $this->_sUrl = null;
-        $this->_sCookies = null;
-        $this->_aOptions = array(
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_USERAGENT => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6",
-                CURLOPT_TIMEOUT => 60,
-                CURLOPT_FOLLOWLOCATION => 1,
-                CURLOPT_RETURNTRANSFER => 1,
+        $this->curlHandler = null;
+        $this->url = null;
+        $this->cookies = null;
+        $this->options = array(
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_USERAGENT => self::USER_AGENT,
+            CURLOPT_TIMEOUT => self::CURL_TIMEOUT,
+            CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_RETURNTRANSFER => 1,
         );
-        $this->_hCurl = curl_init();
-        curl_setopt_array($this->_hCurl, $this->_aOptions);
+        $this->curlHandler = curl_init();
+        curl_setopt_array($this->curlHandler, $this->options);
     }
 
     /**
@@ -43,18 +48,18 @@ class Curls
     public function setOptions($aOptions)
     {
         foreach ($aOptions as $key => $value) {
-            curl_setopt($this->_hCurl, $key, $value);
+            curl_setopt($this->curlHandler, $key, $value);
         }
     }
 
-    public function setProxy($sAddress)
+    public function setProxy($address)
     {
-        curl_setopt($this->_hCurl, CURLOPT_PROXY, $sAddress);
+        curl_setopt($this->curlHandler, CURLOPT_PROXY, $address);
     }
 
     public function setSOCKS5()
     {
-        curl_setopt($this->_hCurl, CURLOPT_PROXYTYPE, 7);
+        curl_setopt($this->curlHandler, CURLOPT_PROXYTYPE, self::CURLOPT_SOCKS5_PROXYTYPE);
     }
 
     /**
@@ -64,11 +69,11 @@ class Curls
      */
     public function execute()
     {
-        $mResult = curl_exec($this->_hCurl);
-        if (!$mResult) {
-            throw new \Exception(curl_error($this->_hCurl));
+        $result = curl_exec($this->curlHandler);
+        if (!$result) {
+            throw new \Exception(curl_error($this->curlHandler));
         }
-        return $mResult;
+        return $result;
     }
 
     /**
@@ -77,19 +82,19 @@ class Curls
      */
     public function setCookie()
     {
-        if (!isset($this->_sUrl)) {
+        if (!isset($this->url)) {
             return false;
         }
-        $hCurl = curl_init($this->_sUrl);
-        curl_setopt($hCurl, CURLOPT_URL, $this->_sUrl);
-        curl_setopt($hCurl, CURLOPT_FOLLOWLOCATION, 0);
-        curl_setopt($hCurl, CURLOPT_HEADER, true);
-        curl_setopt($hCurl, CURLOPT_RETURNTRANSFER, 1);
-        $sData = curl_exec($hCurl);
-        curl_close($hCurl);
-        preg_match_all('|Set-Cookie: (.*);|U', $sData, $aMatches);
-        $sCookies = implode('; ', $aMatches[1]);
-        $this->_sCookies = $sCookies;
+        $curlHandler = curl_init($this->url);
+        curl_setopt($curlHandler, CURLOPT_URL, $this->url);
+        curl_setopt($curlHandler, CURLOPT_FOLLOWLOCATION, 0);
+        curl_setopt($curlHandler, CURLOPT_HEADER, true);
+        curl_setopt($curlHandler, CURLOPT_RETURNTRANSFER, 1);
+        $contentData = curl_exec($curlHandler);
+        curl_close($curlHandler);
+        preg_match_all('|Set-Cookie: (.*);|U', $contentData, $matches);
+        $cookies = implode('; ', $matches[1]);
+        $this->cookies = $cookies;
         return true;
     }
 
@@ -99,7 +104,7 @@ class Curls
      */
     public function getCookie()
     {
-        return $this->_sCookies;
+        return $this->cookies;
     }
 
     /**
@@ -108,8 +113,8 @@ class Curls
      */
     public function close()
     {
-        if (isset($this->_hCurl)) {
-            curl_close($this->_hCurl);
+        if (isset($this->curlHandler)) {
+            curl_close($this->curlHandler);
         }
     }
 
@@ -119,15 +124,15 @@ class Curls
      */
     public function getCurl()
     {
-        return $this->_hCurl;
+        return $this->curlHandler;
     }
 
     /**
      * url setting
-     * @param $sUrl
+     * @param $url
      */
-    public function setUrl($sUrl)
+    public function setUrl($url)
     {
-        $this->_sUrl = $sUrl;
+        $this->url = $url;
     }
 }

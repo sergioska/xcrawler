@@ -29,6 +29,7 @@
     },
 	"require": {
 		"ext-dom": "*",
-		"ext-curl": "*"
+		"ext-curl": "*",
+		"webmozart/assert": "^1.8"
 	}
 }
